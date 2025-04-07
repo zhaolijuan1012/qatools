@@ -1,0 +1,86 @@
+{% extends 'home.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/interface.css') }}">
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+{% endblock %}
+
+{% block newcontent %}
+<ol class="breadcrumb">
+    <li class="active">审计日志</li>
+</ol>
+<div class="top">
+    <div style="float: left;">
+        <input type="text" class="btn btn-default" placeholder="可根据操作类型、操作详情模糊查找" id="search_audit_log_content"
+            value="{{content}}">
+        <button type="submit" class="btn btn-default" id="search_audit_log">搜索</button>
+    </div>
+    <div style="float: right;">
+        <button class="btn btn-default">导入</button>&nbsp&nbsp
+        <button class="btn btn-default" id="export">导出</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        {% if logs %}
+        <tr>
+            <th>序号</th>
+            <th>操作类型</th>
+            <th>操作详情</th>
+            <th>操作人</th>
+            <th>操作时间</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ log.type }}</td>
+            <td>{{ log.content }}</td>
+            <td>{{ log.operator }}</td>
+            <td>{{ log.operator_time }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <p style="text-align: center;margin-top: 250px">暂无数据～</p>
+        {% endif %}
+    </table>
+    {% if logs.total>0 %}
+    <nav aria-label="Page navigation" class="col-md-offset-5">
+        <ul class="pagination">
+            <li {% if not logs.has_prev %} class="disabled" {% endif %}>
+                <a {% if logs.has_prev %}
+                    href="{{ url_for('audit_log.show') }}?page={{ logs.prev_num }}&content={{content}}" {% else %}
+                    href='#' {% endif %} aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% for page_num in range(1,logs.pages + 1) %}
+            <li {% if logs.page==page_num %} class="active" {% endif %}><a
+                    href="{{ url_for('audit_log.show' ) }}?page={{ page_num }}&content={{content}}">{{ page_num }}</a>
+            </li>
+            {% endfor %}
+            <li {% if not logs.has_next %} class="disabled" {% endif %}>
+                <a {% if logs.has_next %}
+                    href="{{ url_for('audit_log.show') }}?page={{ logs.next_num }}&content={{content}}" {% else %}
+                    href="#" {% endif %} aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
+
+{%block scripts %}
+{{super()}}
+<script>
+    $('#search_audit_log').click(function () {
+        let content = $('#search_audit_log_content').val()
+        location.href = '{{url_for("audit_log.show")}}?content=' + content
+    })
+</script>
+{%endblock%}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <h1>测试报告</h1>
+
+    <p>操作时间:2023-08-25 19:23:35&nbsp&nbsp&nbsp操作人:admin&nbsp&nbsp&nbsp 操作类型:全部用例集</p>
+    <p>flow合计:3 成功数量:0 失败数量:3</p>
+    <hr>
+    <h2>失败情况展示：</h2>
+    
+    
+    <h3>1_工资_用例集1</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered" border="1">
+            <tr>
+                <th>caseID</th>
+                <th>case描述</th>
+                <th>URL</th>
+                <th>请求方式</th>
+                <th>请求参数</th>
+                <th>实际code值</th>
+                <th>预期code值</th>
+                <th>实际结果</th>
+                <th>预期结果</th>
+            </tr>
+            
+            <tr>
+                <td>1</td>
+                <td>case描述</td>
+                <td>https://s.xinrenxinshi.com/account-center/service/sso/ajax-password-login</td>
+                <td>Post</td>
+                <td>{&#39;verifyMode&#39;: &#39;0&#39;, &#39;accountName&#39;: &#39;+86-13681574534&#39;, &#39;password&#39;: &#39;fbd0204b381bd4&#39;, &#39;passwordKey&#39;: &#39;B6mkUcLLicDEHyHN1grueMuVbMUAdLGf&#39;, &#39;fromUrl&#39;: &#39;https://s.xinrenxinshi.com/headstatistic/index&#39;, &#39;source&#39;: &#39;default&#39;, &#39;innerVerifyKey&#39;: &#39;&#39;}</td>
+                <td>200</td>
+                <td>200</td>
+                <td>{}</td>
+                <td>{&#39;code&#39;: 1, &#39;message&#39;: &#39;登录失败&#39;, &#39;status&#39;: False, &#39;data&#39;: {&#39;success&#39;: 1, &#39;userRoleType&#39;: None, &#39;loginType&#39;: &#39;&#39;, &#39;needVerifyAgain&#39;: 0, &#39;verifyAgainKey&#39;: &#39;&#39;, &#39;passwordKey&#39;: &#39;&#39;, &#39;accountId&#39;: &#39;&#39;, &#39;accountType&#39;: None, &#39;companyId&#39;: &#39;&#39;, &#39;mobile&#39;: &#39;&#39;, &#39;admin&#39;: 0, &#39;ssotoken&#39;: &#39;&#39;, &#39;redirect&#39;: &#39;&#39;, &#39;needGeeTest&#39;: 1, &#39;geeSuccess&#39;: 1, &#39;newCaptcha&#39;: True, &#39;challenge&#39;: &#39;8c468b60af540e4086a9fb1b56d53511&#39;, &#39;gt&#39;: &#39;53fdd942f0794875983f5510e22d653d&#39;, &#39;hasEmployeeAccount&#39;: 0, &#39;needRealVerify&#39;: False, &#39;needSafeVerify&#39;: False, &#39;scanKey&#39;: None}, &#39;lanDic&#39;: None}</td>
+            </tr>
+            
+            <tr>
+                <td>2</td>
+                <td>casemiaoshu1</td>
+                <td>https://s.xinrenxinshi.com/account-center/service/sso/ajax-password-login</td>
+                <td>Post</td>
+                <td>{&#39;verifyMode&#39;: &#39;0&#39;, &#39;accountName&#39;: &#39;+86-13681574534&#39;, &#39;password&#39;: &#39;fbd0204b381bd4&#39;, &#39;passwordKey&#39;: &#39;B6mkUcLLicDEHyHN1grueMuVbMUAdLGf&#39;, &#39;fromUrl&#39;: &#39;https://s.xinrenxinshi.com/headstatistic/index&#39;, &#39;source&#39;: &#39;default&#39;, &#39;innerVerifyKey&#39;: &#39;&#39;}</td>
+                <td>201</td>
+                <td>200</td>
+                <td>{&#34;code&#34;:200,&#34;data&#34;:{}}</td>
+                <td>{&#39;code&#39;: 1, &#39;message&#39;: &#39;登录失败&#39;, &#39;status&#39;: False, &#39;data&#39;: {&#39;success&#39;: 1, &#39;userRoleType&#39;: None, &#39;loginType&#39;: &#39;&#39;, &#39;needVerifyAgain&#39;: 0, &#39;verifyAgainKey&#39;: &#39;&#39;, &#39;passwordKey&#39;: &#39;&#39;, &#39;accountId&#39;: &#39;&#39;, &#39;accountType&#39;: None, &#39;companyId&#39;: &#39;&#39;, &#39;mobile&#39;: &#39;&#39;, &#39;admin&#39;: 0, &#39;ssotoken&#39;: &#39;&#39;, &#39;redirect&#39;: &#39;&#39;, &#39;needGeeTest&#39;: 1, &#39;geeSuccess&#39;: 1, &#39;newCaptcha&#39;: True, &#39;challenge&#39;: &#39;98b93e3c92b39bc201f8a34bb56fb2dd&#39;, &#39;gt&#39;: &#39;53fdd942f0794875983f5510e22d653d&#39;, &#39;hasEmployeeAccount&#39;: 0, &#39;needRealVerify&#39;: False, &#39;needSafeVerify&#39;: False, &#39;scanKey&#39;: None}, &#39;lanDic&#39;: None}</td>
+            </tr>
+            
+        </table>
+    </div>
+    
+    <h3>2_hh_hh</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered" border="1">
+            <tr>
+                <th>caseID</th>
+                <th>case描述</th>
+                <th>URL</th>
+                <th>请求方式</th>
+                <th>请求参数</th>
+                <th>实际code值</th>
+                <th>预期code值</th>
+                <th>实际结果</th>
+                <th>预期结果</th>
+            </tr>
+            
+            <tr>
+                <td>3</td>
+                <td>为企鹅</td>
+                <td>https://s.xinrenxinshi.com/account-center/service/sso/ajax-password-login</td>
+                <td>Post</td>
+                <td>{&#39;verifyMode&#39;: &#39;0&#39;, &#39;accountName&#39;: &#39;+86-13681574534&#39;, &#39;password&#39;: &#39;fbd0204b381bd4&#39;, &#39;passwordKey&#39;: &#39;B6mkUcLLicDEHyHN1grueMuVbMUAdLGf&#39;, &#39;fromUrl&#39;: &#39;https://s.xinrenxinshi.com/headstatistic/index&#39;, &#39;source&#39;: &#39;default&#39;, &#39;innerVerifyKey&#39;: &#39;&#39;}</td>
+                <td>500</td>
+                <td>200</td>
+                <td>{&#34;data&#34;: {&#34;hasEmployeeAccount&#34;: 0, &#34;accountType&#34;: null, &#34;needSafeVerify&#34;: false, &#34;admin&#34;: 0, &#34;scanKey&#34;: null, &#34;verifyAgainKey&#34;: &#34;&#34;, &#34;accountId&#34;: &#34;&#34;, &#34;loginType&#34;: &#34;&#34;, &#34;userRoleType&#34;: null, &#34;ssotoken&#34;: &#34;&#34;, &#34;gt&#34;: &#34;53fdd942f0794875983f5510e22d653d&#34;, &#34;geeSuccess&#34;: 1, &#34;challenge&#34;: &#34;95d569611a57e26c89a7a25e024e67a8&#34;, &#34;needGeeTest&#34;: 1, &#34;redirect&#34;: &#34;&#34;, &#34;success&#34;: 1, &#34;companyId&#34;: &#34;&#34;, &#34;passwordKey&#34;: &#34;&#34;, &#34;newCaptcha&#34;: true, &#34;needRealVerify&#34;: false, &#34;mobile&#34;: &#34;&#34;, &#34;needVerifyAgain&#34;: 0}, &#34;status&#34;: false, &#34;message&#34;: &#34;登录失败&#34;, &#34;code&#34;: 1, &#34;lanDic&#34;: null}
+</td>
+                <td>{&#39;code&#39;: 1, &#39;message&#39;: &#39;登录失败&#39;, &#39;status&#39;: False, &#39;data&#39;: {&#39;success&#39;: 1, &#39;userRoleType&#39;: None, &#39;loginType&#39;: &#39;&#39;, &#39;needVerifyAgain&#39;: 0, &#39;verifyAgainKey&#39;: &#39;&#39;, &#39;passwordKey&#39;: &#39;&#39;, &#39;accountId&#39;: &#39;&#39;, &#39;accountType&#39;: None, &#39;companyId&#39;: &#39;&#39;, &#39;mobile&#39;: &#39;&#39;, &#39;admin&#39;: 0, &#39;ssotoken&#39;: &#39;&#39;, &#39;redirect&#39;: &#39;&#39;, &#39;needGeeTest&#39;: 1, &#39;geeSuccess&#39;: 1, &#39;newCaptcha&#39;: True, &#39;challenge&#39;: &#39;0ae178dddee0c0fe0acd489870ac8321&#39;, &#39;gt&#39;: &#39;53fdd942f0794875983f5510e22d653d&#39;, &#39;hasEmployeeAccount&#39;: 0, &#39;needRealVerify&#39;: False, &#39;needSafeVerify&#39;: False, &#39;scanKey&#39;: None}, &#39;lanDic&#39;: None}</td>
+            </tr>
+            
+        </table>
+    </div>
+    
+    <h3>3_jj_jj</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered" border="1">
+            <tr>
+                <th>caseID</th>
+                <th>case描述</th>
+                <th>URL</th>
+                <th>请求方式</th>
+                <th>请求参数</th>
+                <th>实际code值</th>
+                <th>预期code值</th>
+                <th>实际结果</th>
+                <th>预期结果</th>
+            </tr>
+            
+            <tr>
+                <td>3</td>
+                <td>为企鹅</td>
+                <td>https://s.xinrenxinshi.com/account-center/service/sso/ajax-password-login</td>
+                <td>Post</td>
+                <td>{&#39;verifyMode&#39;: &#39;0&#39;, &#39;accountName&#39;: &#39;+86-13681574534&#39;, &#39;password&#39;: &#39;fbd0204b381bd4&#39;, &#39;passwordKey&#39;: &#39;B6mkUcLLicDEHyHN1grueMuVbMUAdLGf&#39;, &#39;fromUrl&#39;: &#39;https://s.xinrenxinshi.com/headstatistic/index&#39;, &#39;source&#39;: &#39;default&#39;, &#39;innerVerifyKey&#39;: &#39;&#39;}</td>
+                <td>500</td>
+                <td>200</td>
+                <td>{&#34;data&#34;: {&#34;hasEmployeeAccount&#34;: 0, &#34;accountType&#34;: null, &#34;needSafeVerify&#34;: false, &#34;admin&#34;: 0, &#34;scanKey&#34;: null, &#34;verifyAgainKey&#34;: &#34;&#34;, &#34;accountId&#34;: &#34;&#34;, &#34;loginType&#34;: &#34;&#34;, &#34;userRoleType&#34;: null, &#34;ssotoken&#34;: &#34;&#34;, &#34;gt&#34;: &#34;53fdd942f0794875983f5510e22d653d&#34;, &#34;geeSuccess&#34;: 1, &#34;challenge&#34;: &#34;95d569611a57e26c89a7a25e024e67a8&#34;, &#34;needGeeTest&#34;: 1, &#34;redirect&#34;: &#34;&#34;, &#34;success&#34;: 1, &#34;companyId&#34;: &#34;&#34;, &#34;passwordKey&#34;: &#34;&#34;, &#34;newCaptcha&#34;: true, &#34;needRealVerify&#34;: false, &#34;mobile&#34;: &#34;&#34;, &#34;needVerifyAgain&#34;: 0}, &#34;status&#34;: false, &#34;message&#34;: &#34;登录失败&#34;, &#34;code&#34;: 1, &#34;lanDic&#34;: null}
+</td>
+                <td>{&#39;code&#39;: 1, &#39;message&#39;: &#39;登录失败&#39;, &#39;status&#39;: False, &#39;data&#39;: {&#39;success&#39;: 1, &#39;userRoleType&#39;: None, &#39;loginType&#39;: &#39;&#39;, &#39;needVerifyAgain&#39;: 0, &#39;verifyAgainKey&#39;: &#39;&#39;, &#39;passwordKey&#39;: &#39;&#39;, &#39;accountId&#39;: &#39;&#39;, &#39;accountType&#39;: None, &#39;companyId&#39;: &#39;&#39;, &#39;mobile&#39;: &#39;&#39;, &#39;admin&#39;: 0, &#39;ssotoken&#39;: &#39;&#39;, &#39;redirect&#39;: &#39;&#39;, &#39;needGeeTest&#39;: 1, &#39;geeSuccess&#39;: 1, &#39;newCaptcha&#39;: True, &#39;challenge&#39;: &#39;ac9d9027601e30eac88e2d3a0d1441a1&#39;, &#39;gt&#39;: &#39;53fdd942f0794875983f5510e22d653d&#39;, &#39;hasEmployeeAccount&#39;: 0, &#39;needRealVerify&#39;: False, &#39;needSafeVerify&#39;: False, &#39;scanKey&#39;: None}, &#39;lanDic&#39;: None}</td>
+            </tr>
+            
+            <tr>
+                <td>2</td>
+                <td>casemiaoshu1</td>
+                <td>https://s.xinrenxinshi.com/account-center/service/sso/ajax-password-login</td>
+                <td>Post</td>
+                <td>{&#39;verifyMode&#39;: &#39;0&#39;, &#39;accountName&#39;: &#39;+86-13681574534&#39;, &#39;password&#39;: &#39;fbd0204b381bd4&#39;, &#39;passwordKey&#39;: &#39;B6mkUcLLicDEHyHN1grueMuVbMUAdLGf&#39;, &#39;fromUrl&#39;: &#39;https://s.xinrenxinshi.com/headstatistic/index&#39;, &#39;source&#39;: &#39;default&#39;, &#39;innerVerifyKey&#39;: &#39;&#39;}</td>
+                <td>201</td>
+                <td>200</td>
+                <td>{&#34;code&#34;:200,&#34;data&#34;:{}}</td>
+                <td>{&#39;code&#39;: 1, &#39;message&#39;: &#39;登录失败&#39;, &#39;status&#39;: False, &#39;data&#39;: {&#39;success&#39;: 1, &#39;userRoleType&#39;: None, &#39;loginType&#39;: &#39;&#39;, &#39;needVerifyAgain&#39;: 0, &#39;verifyAgainKey&#39;: &#39;&#39;, &#39;passwordKey&#39;: &#39;&#39;, &#39;accountId&#39;: &#39;&#39;, &#39;accountType&#39;: None, &#39;companyId&#39;: &#39;&#39;, &#39;mobile&#39;: &#39;&#39;, &#39;admin&#39;: 0, &#39;ssotoken&#39;: &#39;&#39;, &#39;redirect&#39;: &#39;&#39;, &#39;needGeeTest&#39;: 1, &#39;geeSuccess&#39;: 1, &#39;newCaptcha&#39;: True, &#39;challenge&#39;: &#39;97446e9f16eaa17f96641dd9c56c58fa&#39;, &#39;gt&#39;: &#39;53fdd942f0794875983f5510e22d653d&#39;, &#39;hasEmployeeAccount&#39;: 0, &#39;needRealVerify&#39;: False, &#39;needSafeVerify&#39;: False, &#39;scanKey&#39;: None}, &#39;lanDic&#39;: None}</td>
+            </tr>
+            
+        </table>
+    </div>
+    
+    
+</body>
+
+</html>

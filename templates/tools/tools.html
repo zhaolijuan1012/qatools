@@ -1,0 +1,19 @@
+{% extends 'home.html' %}
+{% block title %}测试工具{% endblock %}
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+{% block newcontent %}
+    <ol class="breadcrumb">
+        <li class="active">测试工具</li>
+    </ol>
+    <span><h3>集成工具</h3></span><hr>
+    <div style="text-align: center">
+        <a href="https://linux.360rce.com/" target="_blank" >Linx命令查询</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="https://www.json.cn/" target="_blank">json转换</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="https://ntool.chinaz.com/tools/qrCode" target="_blank">二维码生成工具</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="https://tool.lu/timestamp/" target="_blank">时间戳转换</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="http://sfz.uzuzuz.com/?region=110101&birthday=19900307&sex=1&num=5&r=40" target="_blank">身份证生成</a>&nbsp&nbsp&nbsp&nbsp
+        <a href="http://www.99cankao.com/date/add-subtract-dates.php" target="_blank">日期天数计算器</a>&nbsp&nbsp&nbsp&nbsp
+    </div>
+{% endblock %}

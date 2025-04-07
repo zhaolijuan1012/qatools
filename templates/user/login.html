@@ -1,0 +1,28 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}登录{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/login.css') }}">
+{% endblock %}
+{% block  content %}
+    <div id="login_box">
+        {% if msg %}
+        <p style="color: red;font-size: 17px">{{ msg }}</p>
+        {% endif %}
+        <h2 class="login_h2">LOGIN</h2>
+        <div class="logintab">
+            <form action="{{ url_for('user.login') }}" method="post">
+                <div id="input_box">
+                    <input class=login_input type="text" name="username" placeholder="请输入用户名">
+                </div>
+                <div class="input_box">
+                    <input class=login_input type="password" name="password" placeholder="请输入密码">
+                </div>
+                <button class="login_button">登录</button>
+            </form>
+            <p>还没有账号？<a href="{{ url_for('user.register') }}">注册</a></p>
+            </div>
+    </div>
+{% endblock %}
+
+

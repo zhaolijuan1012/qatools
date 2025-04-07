@@ -1,0 +1,83 @@
+body{
+    background: #Fafafa;
+}
+
+#content{
+    height: 700px;
+    width: 1405px;
+    /*background: #F8F8F8;*/
+}
+
+#directory{
+    height: 600px;
+    width: 170px;
+    float: left;
+    border: 1px solid antiquewhite;
+    background: #F8F8F8;
+    margin: 20px 20px;
+    text-align: center;
+}
+#directory a{
+    color: burlywood;
+    width: 170px;
+    padding: 5px 40px;
+}
+
+#directory div {
+    width: 170px;
+    padding: 10px 10px;
+    background: #00000008;
+    margin-top: 10px;
+
+}
+#directory a:hover {
+    background-color: navajowhite;
+    box-shadow: 5px 5px 5px wheat;
+}
+#newcontent{
+    height: 660px;
+    width: 1155px;
+    border: 1px solid antiquewhite;
+    text-align: left;
+    float: right;
+    margin: 20px 20px ;
+    background-color: white;
+}
+
+.flat{
+    display: flex;
+    align-items: center;
+}
+
+#alertSuccessBox,
+#alertDangerBox {
+    display: none;
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    z-index: 9999;
+    width: 300px;
+    text-align: center;
+}
+
+.top {
+    margin: 10px 10px;
+    height: 30px;
+    /* margin-left: 10px; */
+}
+
+.top div input {
+    width: 300px;
+
+}
+
+.top>div>button {
+    width: 100px;
+    height: 30px;
+    border: 0px;
+    border-radius: 3px;
+    color: grey;
+    text-align: center;
+    font-size: 15px;
+    background-color: papayawhip;
+}

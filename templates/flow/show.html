@@ -1,0 +1,249 @@
+{% extends 'home.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/flow.css') }}">
+{% endblock %}
+
+{% block newcontent %}
+<ol class="breadcrumb">
+    <li class="active">用例集</li>
+</ol>
+<div class="top">
+    <div style="float: left;">
+        <input type="text" class="btn btn-default" placeholder="可根据用例集ID和用例集描述模糊查找" id="search_flow_content"
+            value="{{content}}">
+        <button type="submit" class="btn btn-default" id="search_flow">搜索</button>
+    </div>
+    <div style="float: right;">
+        <button class="btn btn-default" onclick="document.getElementById('id01').style.display='block'"
+            style="width:auto;">添加用例集</button>&nbsp&nbsp
+        <button class="btn btn-default">导入</button>&nbsp&nbsp
+        <button class="btn btn-default" id="export">导出</button>
+        <button class="btn btn-default" id="flows_execute">用例集执行</button>
+    </div>
+</div>
+
+<!-- 添加用例集弹窗 -->
+<div id="id01" class="modal">
+    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">×</span>
+    <form class="modal-content animate" action="{{url_for('flow.add_flow')}}">
+        <div class="container">
+            <div>
+                <label><b>用例集描述</b></label>
+                <input type="text" placeholder="请输入用例集描述" name="flowDescription" value="" required>
+            </div>
+            <div>
+                <label><b>所属模块</b></label>
+                <input type="text" placeholder="请输入所属模块" name="module" required>
+            </div>
+            <div class="clearfix">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'"
+                    class="cancelbtn">取消</button>
+                <button type="submit" class="signupbtn">确定</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 修改用例集弹窗 -->
+<div id="id02" class="modal">
+    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">×</span>
+    <form id="edit_flow" class="modal-content animate" action="{{url_for('flow.edit_flow')}}" method="post">
+        <div class="container">
+            <div>
+                <label><b>用例集描述</b></label>
+                <input type="text" placeholder="请输入用例集描述" name="edit_flowDescription" value="" required>
+            </div>
+            <div>
+                <label><b>所属模块</b></label>
+                <input type="text" placeholder="请输入所属模块" name="edit_module" required>
+            </div>
+            <div class="clearfix">
+                <button type="button" onclick="document.getElementById('id02').style.display='none'"
+                    class="cancelbtn">取消</button>
+                <button type="submit" class="signupbtn">确定</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        {% if flows %}
+        <tr>
+            <th>序号</th>
+            <th>用例集ID</th>
+            <th>用例集描述</th>
+            <th>case顺序</th>
+            <th>创建者</th>
+            <th>创建时间</th>
+            <th>修改者</th>
+            <th>修改时间</th>
+            <th>所属模块</th>
+            <th>操作</th>
+        </tr>
+        {% for flow in flows %}
+        <tr id="{{ flow.id }}">
+            <td>{{ loop.index }}</td>
+            <td class="id">{{ flow.id }}</td>
+            <td class="flowDescription">{{ flow.flowDescription }}</td>
+            <td>{{ flow.case_list }}</td>
+            <td>{{ flow.creator }}</td>
+            <td>{{ flow.add_time }}</td>
+            <td>{{ flow.mender }}</td>
+            <td>{{ flow.edit_time }}</td>
+            <td class="module">{{ flow.module }}</td>
+            <td>
+                <a href="/flow/{{ flow.id }}/detail">详情</a>
+                <a class="edit_flow_button">修改</a>
+                <a class="del_flow_button">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <p style="text-align: center;margin-top: 250px">暂无数据～</p>
+        {% endif %}
+    </table>
+    {% if flows.total>0 %}
+    <nav aria-label="Page navigation" class="col-md-offset-5">
+        <ul class="pagination">
+            <li {% if not flows.has_prev %} class="disabled" {% endif %}>
+                <a {% if flows.has_prev %}
+                    href="{{ url_for('flow.show') }}?page={{ flows.prev_num }}&content={{content}}" {% else %} href='#'
+                    {% endif %} aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% for page_num in range(1,flows.pages + 1) %}
+            <li {% if flows.page==page_num %} class="active" {% endif %}><a
+                    href="{{ url_for('flow.show' ) }}?page={{ page_num }}&content={{content}}">{{ page_num }}</a></li>
+            {% endfor %}
+            <li {% if not flows.has_next %} class="disabled" {% endif %}>
+                <a {% if flows.has_next %}
+                    href="{{ url_for('flow.show') }}?page={{ flows.next_num }}&content={{content}}" {% else %} href="#"
+                    {% endif %} aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
+{%block scripts %}
+{{super()}}
+<script>
+    $('.del_flow_button').click(function () {
+        var a = confirm('请确认是否删除该flow');
+        let id = $(this).parent().prevAll(".id").text();
+        if (a == true) {
+            var url = "{{url_for('flow.del_flow')}}?id=" + id;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code == 200) {
+                        showAlert(data.message, 'success')
+                        {#sessionStorage.setItem('alertMessage', data.message);#}
+                        {#sessionStorage.setItem('alertType', 'success');#}
+                        location.reload();
+                    } else {
+                        showAlert(data.message, 'danger')
+                        {#sessionStorage.setItem('alertMessage', data.message);#}
+                        {#sessionStorage.setItem('alertType', 'danger');#}
+                    }
+                });
+        }
+        location.reload()
+    });
+
+    $('#search_flow').click(function () {
+        let content = $('#search_flow_content').val()
+        if (content == '') {
+            window.alert("搜索内容不能为空");
+        }
+        else {
+            location.href = '{{url_for("flow.show")}}?content=' + content
+        }
+    })
+
+    // 点击取消和X按钮时清空内容
+    function clearModalContent() {
+        $('#id01').find('input[type=text], textarea').val('');
+        $('#id01').find('.error-message').remove();
+        $('#id02').find('input[type=text], textarea').val('');
+        $('#id02').find('.error-message').remove();
+        // 移除通过函数添加的部分
+        $('.added-part').remove();
+        document.getElementById('id01').style.display = 'none';
+        document.getElementById('id02').style.display = 'none';
+    }
+    $('.cancelbtn, .close').click(clearModalContent);
+
+    // 添加flow弹窗点击确认按钮
+    function handleSubmit(e) {
+        e.preventDefault(); // 阻止表单的默认提交行为
+        var modalId = $(this).closest('.modal').attr('id');
+        $.ajax({
+            url: $(this).attr('action'),// 获取表单的 action 属性作为请求的 URL
+            type: 'POST',
+            data: $(this).serialize(), // 序列化表单的数据
+            success: function (data) {
+                if (data.code == 200) {
+                    {#sessionStorage.se tItem('alertMessage', data.message);#}
+                    {#sessionStorage.setItem('alertType', 'success');#}
+                    showAlert(data.message,'success')
+                    document.getElementById(modalId).style.display = 'none';
+                    location.reload();
+                } else {
+                    // 否则，显示 message 的内容
+                    // 设置sessionStorage
+                    showAlert(data.message, 'danger')
+                    {#sessionStorage.setItem('alertMessage', data.message);#}
+                    {#sessionStorage.setItem('alertType', 'danger');#}
+                }
+            }
+        });
+    }
+    $('#id01 form.modal-content, #id02 form.modal-content').on('submit', handleSubmit);
+
+    $('table tr').click(function (event) {
+        // Check if the target element is the first td or the last td
+        if (!($(event.target).is('a') || $(event.target).is('td:first-child') || $(event.target).is('td:last-child'))) {
+            var flowID = $(this).attr('id');  // 获取行的id
+            location.href = '/flow/' + flowID + '/detail';
+        }
+    });
+
+    $(document).on('click', '.edit_flow_button', function () {
+        document.getElementById('id02').style.display = 'block'
+        let flowDescription = $(this).parent().prevAll(".flowDescription").text()
+        let module = $(this).parent().prevAll(".module").text()
+        var id = $(this).parent().prevAll(".id").text()
+        $("input[name='edit_flowDescription']").val(flowDescription)
+        $("input[name='edit_module']").val(module)
+        $("#edit_flow").attr('action', "{{url_for('flow.edit_flow')}}?id=" + id)
+    })
+
+    $(document).on('click', '#flows_execute', function () {
+        showAlert('操作成功，请在测试报告中查看', 'success');
+        $.get("{{url_for('flow.flows_execute')}}", function (data) {
+            if (data.message == "success") {
+                showAlert('测试报告已生成，请在测试报告中查看','success')
+                {#sessionStorage.setItem('alertMessage', "测试报告已生成，请在测试报告中查看");#}
+                {#sessionStorage.setItem('alertType', 'success');#}
+                location.reload();
+
+            } else {
+                // 否则，显示 message 的内容
+                // 设置sessionStorage
+                {#sessionStorage.setItem('alertMessage', data.message);#}
+                {#sessionStorage.setItem('alertType', 'danger');#}
+                showAlert(data.message, 'danger')
+            }
+        });
+    })
+
+
+
+</script>
+{%endblock%}

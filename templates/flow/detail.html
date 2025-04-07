@@ -1,0 +1,228 @@
+{% extends 'home.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/flow_detail.css') }}">
+{% endblock %}
+{% block newcontent %}
+<ol class="breadcrumb">
+    <li><a href="{{ url_for('flow.show') }}">用例集</a></li>
+    <li class="active">用例集详情</li>
+</ol>
+<h3>&nbsp&nbsp【{{ flow.id }}】{{ flow.module }}-{{ flow.flowDescription }}</h3>
+<hr>
+<div class="top">
+    <div style="float: right;">
+        <button class="btn btn-default" onclick="document.getElementById('id01').style.display='block'"
+            style="width:auto;">添加步骤</button>&nbsp&nbsp
+        <button class="btn btn-default">导入</button>&nbsp&nbsp
+        <button class="btn btn-default" id="export">导出</button>
+    </div>
+</div>
+
+
+<!-- 添加接口弹窗 -->
+<div id="id01" class="modal">
+    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">×</span>
+    <form class="modal-content animate" action="{{url_for('flow.add_step')}}?flow_id={{ flow.id }}" method="post">
+        <div class="container">
+            <div class="flat">
+                <label><b>caseID</b><span style="color: red;">*</span></label>
+                <input list="livesearch" type="text" id="search" placeholder="可根据caseID和case描述进行搜索"
+                    onkeyup="showResult(this.value)" name="caseID" required>
+                <datalist id="livesearch"></datalist>
+            </div>
+            <div class="clearfix">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'"
+                    class="cancelbtn">取消</button>
+                <button type="submit" class="signupbtn">确定</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% if flow %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        {% if cases %}
+        <tr>
+            <th>序号</th>
+            <th>caseID</th>
+            <th>case描述</th>
+            <th>接口url</th>
+            <th>请求参数</th>
+            <th>预期结果</th>
+            <th>请求参数化</th>
+            <th>返回参数化</th>
+            <th>code</th>
+            <!-- <th>创建者</th>
+            <th>创建时间</th>
+            <th>修改者</th>
+            <th>修改时间</th> -->
+            <th>操作</th>
+        </tr>
+        {% for case in cases %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td class="id">{{ case.id }}</td>
+            <td>{{ case.caseDescription }}</td>
+            <td>{{ case.interface.interfaceURL }}</td>
+            <td class="ellipsis request" data-toggle="tooltip" title="{{ case.request }}">{{ case.request }}</td>
+            <td class="ellipsis response" data-toggle="tooltip" title="{{ case.response }}">{{ case.response }}</td>
+            <td class="ellipsis request_parameterizations" data-toggle="tooltip"
+                title="{{ case.request_parameterizations }}">
+                {{case.request_parameterizations}}</td>
+            <td class="ellipsis response_parameterization_dict" data-toggle="tooltip"
+                title="{{ case.response_parameterization_dict }}">
+                {{case.response_parameterization_dict}}</td>
+            <td class="code">{{case.code}}</td>
+            <!-- <td>{{ case.creator }}</td>
+            <td>{{ case.add_time }}</td>
+            <td>{{ case.mender }}</td>
+            <td>{{ case.edit_time }}</td> -->
+            <td>
+                <a class="del_step">删除步骤</a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <p style="text-align: center;margin-top: 250px">暂无数据～</p>
+        {% endif %}
+    </table>
+{#    {% if cases %}#}
+{#    <nav aria-label="Page navigation" class="col-md-offset-5">#}
+{#        <ul class="pagination">#}
+{#            <li {% if not cases.has_prev %} class="disabled" {% endif %}>#}
+{#                <a {% if cases.has_prev %} href="/flow/{{ flow.id }}/detail?page={{ cases.prev_num }}" {% else %}#}
+{#                    href='#' {% endif %} aria-label="Previous">#}
+{#                    <span aria-hidden="true">&laquo;</span>#}
+{#                </a>#}
+{#            </li>#}
+{#            {% for page_num in range(1,cases.pages + 1) %}#}
+{#            <li {% if cases.page==page_num %} class="active" {% endif %}><a#}
+{#                    href="/flow/{{ flow.id }}/detail?page={{ page_num }}">{{ page_num }}</a></li>#}
+{#            {% endfor %}#}
+{#            <li {% if not cases.has_next %} class="disabled" {% endif %}>#}
+{#                <a {% if cases.has_next %} href="/flow/{{ flow.id }}/detail?page={{ cases.next_num }}" {% else %}#}
+{#                    href="#" {% endif %} aria-label="Next">#}
+{#                    <span aria-hidden="true">&raquo;</span>#}
+{#                </a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </nav>#}
+{#    {% endif %}#}
+</div>
+{% else %}
+<p>未获取到对应的用例集</p>
+{% endif %}
+{% endblock %}
+{%block scripts %}
+{{super()}}
+<script>
+    // 添加case弹窗：根据接口ID输入框中输入内容提供对应的输入建议
+    function showResult(str) {
+        if (str.length != 0) {
+            $.ajax({
+                url: '{{url_for("flow.search_case")}}?str=' + str,
+                type: 'GET',
+                success: function (data) {
+                    let html = '';
+                    for (var key in data.data) {
+                        if (data.data.hasOwnProperty(key)) {
+                            var value = data.data[key];
+                            console.log('Key is ' + key + ', value is ' + value);
+                            html += '<option value="' + key + '">' + value + '</option>';
+                        }
+                    }
+                    document.getElementById("livesearch").innerHTML = html;
+                    document.getElementById("livesearch").style.border = "1px solid #A5ACB2";
+                }
+            });
+        }
+    }
+    // 添加case弹窗：校验接口id输入框的内容是否存在
+    $('#search').change(function () {
+        var inputVal = $(this).val();
+        var datalist = $('#livesearch');
+        var options = $('option', datalist);
+
+        var optionExists = false;
+        options.each(function () {
+            if (this.value == inputVal) {
+                optionExists = true;
+                return false; // Break the loop
+            }
+        });
+
+        if (!optionExists) {
+            $(this).val(''); // Clear the input
+            alert('您所输入的caseID不存在请重新输入'); // Show an error message
+        }
+    });
+    // 点击取消和X按钮时清空内容
+    function clearModalContent() {
+        $('#id01').find('input[type=text], textarea').val('');
+        $('#id01').find('.error-message').remove();
+        $('#id02').find('input[type=text], textarea').val('');
+        $('#id02').find('.error-message').remove();
+        document.getElementById('id01').style.display = 'none';
+        document.getElementById('id02').style.display = 'none';
+    }
+    $('.cancelbtn, .close').click(clearModalContent);
+
+    // 添加case弹窗点击确认按钮
+    function handleSubmit(e) {
+        e.preventDefault(); // 阻止表单的默认提交行为
+        var modalId = $(this).closest('.modal').attr('id');
+        $.ajax({
+            url: $(this).attr('action'),// 获取表单的 action 属性作为请求的 URL
+            type: 'POST',
+            data: $(this).serialize(), // 序列化表单的数据
+            success: function (data) {
+                if (data.code == 200) {
+                    console.log(data.message)
+                    {#sessionStorage.setItem('alertMessage', data.message);#}
+                    {#sessionStorage.setItem('alertType', 'success');#}
+                    showAlert(data.message, 'success')
+                    // 如果返回的 message 为 "添加成功"，则关闭弹窗
+                    document.getElementById(modalId).style.display = 'none';
+                    location.reload();
+                } else {
+                    // 否则，显示 message 的内容
+                    {#sessionStorage.setItem('alertMessage', data.message);#}
+                    {#sessionStorage.setItem('alertType', 'danger');#}
+                    showAlert(data.message, 'danger')
+                }
+            }
+        });
+    }
+    $('#id01 form.modal-content, #id02 form.modal-content').on('submit', handleSubmit);
+
+    // 删除步骤
+    $('.del_step').click(function () {
+        var a = confirm('请确认是否删除');
+        let case_id = $(this).parent().prevAll(".id").text();
+        console.log(case_id)
+        if (a == true) {
+            var url = "{{url_for('flow.del_step')}}?case_id=" + case_id + '&flow_id={{ flow.id }}';
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message == "操作成功") {
+                        sessionStorage.setItem('alertMessage', data.message);
+                        sessionStorage.setItem('alertType', 'success');
+                    } else {
+                        sessionStorage.setItem('alertMessage', data.message);
+                        sessionStorage.setItem('alertType', 'danger');
+                    }
+                });
+        }
+        location.reload()
+    });
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({
+            template: '<div class="tooltip custom-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+        });
+    });
+</script>
+{%endblock%}

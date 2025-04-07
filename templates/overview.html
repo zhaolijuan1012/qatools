@@ -1,0 +1,65 @@
+{% extends 'home.html' %}
+{% block styles %}
+    {{ super() }}
+    <link rel='stylesheet' href='{{ url_for('static',filename='css/overview.css') }}'>
+{% endblock %}
+{% block newcontent %}
+    <ol class="breadcrumb">
+        <li class="active">概览</li>
+    </ol>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <a href="{{ url_for('interface.show') }}" style="text-decoration: none;">
+                    <div class="card text-white  mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">接口数统计</h5>
+                            <p class="card-text">{{ interface_len }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{{ url_for('case.show') }}" style="text-decoration: none;">
+                    <div class="card text-white  mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">用例数统计</h5>
+                            <p class="card-text">{{ case_len }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{{ url_for('flow.show') }}" style="text-decoration: none;">
+                    <div class="card text-white  mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">用例集统计</h5>
+                            <p class="card-text">{{ flow_len }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{{ url_for('user.user_list') }}" style="text-decoration: none;">
+                    <div class="card text-white  mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">用户数统计</h5>
+                            <p class="card-text">{{ user_len }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-4">
+                <a href="{{ url_for('user.user_list') }}" style="text-decoration: none;">
+                    <div class="card text-white  mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">接口覆盖率统计</h5>
+                            <p class="card-text">{{ interface_coverage }}%</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

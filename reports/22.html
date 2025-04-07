@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+</head>
+<style>
+    .spacer {
+        margin-right: 150px;
+    }
+
+    .center-text {
+        text-align: center;
+        margin: 30px;
+    }
+</style>
+
+<body>
+    <h1 class="center-text">测试报告</h1>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>操作时间:2025-04-06 16:17:04</p>
+                <p>flow合计:1</p>
+            </div>
+            <div class="col">
+                <p>操作人:root</p>
+                <p>成功数量:0</p>
+            </div>
+            <div class="col">
+                <p>操作类型:全部用例集</p>
+                <p>失败数量:1</p>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <h2>失败情况展示：</h2>
+    
+    
+    <h3>35_1_1</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <tr>
+                <th>caseID</th>
+                <th>case描述</th>
+                <th>URL</th>
+                <th>请求方式</th>
+                <th>请求参数</th>
+                <th>实际code值</th>
+                <th>预期code值</th>
+                <th>实际结果</th>
+                <th>预期结果</th>
+            </tr>
+            
+            <tr>
+                <td>14</td>
+                <td>22</td>
+                <td>https://dict.youdao.com:443/keyword/key</td>
+                <td>POST</td>
+                <td>{&#39;text&#39;: &#39;model&#39;}</td>
+                <td>None</td>
+                <td>200</td>
+                <td>{&#34;code&#34;:0,&#34;message&#34;:&#34;SUCCESS&#34;,&#34;data&#34;:[]}</td>
+                <td>{&#39;code&#39;: 0, &#39;message&#39;: &#39;SUCCESS&#39;, &#39;data&#39;: []}</td>
+            </tr>
+            
+        </table>
+        
+        
+    </div>
+</body>
+
+</html>

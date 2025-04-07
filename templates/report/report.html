@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+</head>
+<style>
+    .spacer {
+        margin-right: 150px;
+    }
+
+    .center-text {
+        text-align: center;
+        margin: 30px;
+    }
+</style>
+
+<body>
+    <h1 class="center-text">测试报告</h1>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>操作时间:{{operation_time}}</p>
+                <p>flow合计:{{flow_len}}</p>
+            </div>
+            <div class="col">
+                <p>操作人:{{operator}}</p>
+                <p>成功数量:{{success}}</p>
+            </div>
+            <div class="col">
+                <p>操作类型:{{type}}</p>
+                <p>失败数量:{{fail}}</p>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <h2>失败情况展示：</h2>
+    {% if fail_flows %}
+    {% for flow_name,fail_cases in fail_flows.items()%}
+    <h3>{{flow_name}}</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <tr>
+                <th>caseID</th>
+                <th>case描述</th>
+                <th>URL</th>
+                <th>请求方式</th>
+                <th>请求参数</th>
+                <th>实际code值</th>
+                <th>预期code值</th>
+                <th>实际结果</th>
+                <th>预期结果</th>
+            </tr>
+            {%for case in fail_cases%}
+            <tr>
+                <td>{{case.case_ID}}</td>
+                <td>{{case.case_description}}</td>
+                <td>{{case.case_URL}}</td>
+                <td>{{case.case_method}}</td>
+                <td>{{case.case_request}}</td>
+                <td>{{case.case_code_expect}}</td>
+                <td>{{case.case_code_result}}</td>
+                <td>{{case.case_response_expect}}</td>
+                <td>{{case.case_response_result}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+        {%endfor%}
+        {% else %}
+        <p>恭喜! 没有失败用例哦～</p>
+        {%endif%}
+    </div>
+</body>
+
+</html>

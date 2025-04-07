@@ -1,0 +1,412 @@
+{% extends 'home.html' %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/pop_up_window.css') }}">
+{% endblock %}
+
+{% block newcontent %}
+    <ol class="breadcrumb">
+        <li class="active">用户列表</li>
+    </ol>
+
+    <div class="top">
+        <div style="float: left;">
+            <input type="text" class="btn btn-default" placeholder="可根据用户名、手机号模糊查找"
+                   id="search_user_content"
+                   value="{{ content }}">
+            <button type="submit" class="btn btn-default" id="search_user">搜索</button>
+        </div>
+        <div style="float: right;">
+            <button class="btn btn-default" onclick="document.getElementById('add_user_modal').style.display='block'"
+                    style="width:auto;">添加用户
+            </button>
+            &nbsp&nbsp
+            <button class="btn btn-default" id="import_users">导入</button>
+            &nbsp&nbsp
+            <button class="btn btn-default" id="export_users">导出</button>
+        </div>
+    </div>
+    <!--用户列表 -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>序号</th>
+                <th>用户名</th>
+                <th>手机号</th>
+                <th>邮箱</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            {% if g.user.username == 'root' %}
+                {% for user in users %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="edit_username">{{ user.username }}</td>
+                        <td class="edit_phone">{{ user.phone }}</td>
+                        <td class="edit_email">{{ user.email }}</td>
+                        <td class="edit_status">{% if user.isdelete == 0 %}
+                            正常
+                        {% elif user.isdelete == 1 %}
+                            已删除
+                        {% else %}
+                            未知
+                        {% endif %}
+                        </td>
+                        <td>{{ user.add_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            <a class="edit_user" data-id="{{ user.id }}">修改</a>
+                            {% if user.username != 'root' %}
+                                <a class="edit_user_password" data-id="{{ user.id }}">重置密码</a>
+                                <a class="del_user" data-id="{{ user.id }}">删除</a>
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>1</td>
+                    <td class="edit_username">{{ g.user.username }}</td>
+                    <td class="edit_phone">{{ g.user.phone }}</td>
+                    <td class="edit_email">{{ g.user.email }}</td>
+                    <td class="edit_status">{% if g.user.isdelete == 0 %}
+                        正常
+                    {% elif g.user.isdelete == 1 %}
+                        已删除
+                    {% else %}
+                        未知
+                    {% endif %}
+                    </td>
+                    <td>{{ g.user.add_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        <a class="edit_user" data-id="{{ user.id }}">修改</a>
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+
+    <!-- 修改用户弹窗 -->
+    <div id="edit_user_modal" class="pop_up_box">
+        <span onclick="closeModal('edit_user_modal')" class="close"
+              title="Close Modal">×</span>
+        <form class="pop_up_box-content animate" id="edit_user" action="#" method="post">
+            <div class="pop_up_container">
+                <div>
+                    <label><b>用户名称</b></label>
+                    <input type="text" placeholder="请输入用户名称" name="edit_username" value="" required>
+                </div>
+                <div>
+                    <label><b>手机号码</b></label>
+                    <input type="text" placeholder="请输入手机号" name="edit_phone" value="" required>
+                </div>
+                <div>
+                    <label><b>邮箱</b></label>
+                    <input type="text" placeholder="请输入邮箱" name="edit_email" value="" required>
+                </div>
+                {#                {% if g.user.username == 'root' %}#}
+                {#                <div>#}
+                {#                    <label><b>用户状态</b></label>#}
+                {#                    <select name="edit_isdelete">#}
+                {#                        <option value="0" selected>正常</option>#}
+                {#                        <option value="1">已删除</option>#}
+                {#                    </select>#}
+                {#                </div>#}
+                {#                {% endif %}#}
+                <div class="clearfix">
+                    <button type="button" onclick="closeModal('edit_user_modal')" class="cancelBtn">取消</button>
+                    <button type="submit" class="confirmBtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 修改密码弹窗 -->
+    <div id="edit_user_password_modal" class="pop_up_box">
+        <span onclick="closeModal('edit_user_password_modal')" class="close"
+              title="Close Modal">×</span>
+        <form class="pop_up_box-content animate" id="edit_user_password" action="#" method="post">
+            <div class="pop_up_container">
+                <div>
+                    <label><b>请输入密码</b></label>
+                    <input type="password" placeholder="请输入密码" name="edit_user_password" value="" required>
+                </div>
+                <div>
+                    <label><b>请确认密码</b></label>
+                    <input type="password" placeholder="请再次输入密码" name="edit_user_password_confirm" value=""
+                           required>
+                </div>
+                <div class="clearfix">
+                    <button type="button" onclick="closeModal('edit_user_password_modal')"
+                            class="cancelBtn">取消
+                    </button>
+                    <button type="submit" class="confirmBtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 添加用户弹窗 -->
+    <div id="add_user_modal" class="pop_up_box">
+        <span onclick="closeModal('add_user_modal')" class="close"
+              title="Close Modal">×</span>
+        <form class="pop_up_box-content animate" id="add_user" action="#" method="post">
+            <div class="pop_up_container">
+                <div>
+                    <label><b>请输入用户名</b></label>
+                    <input type="text" placeholder="请输入用户名" name="username" value="" required>
+                </div>
+                <div>
+                    <label><b>请输入手机号</b></label>
+                    <input type="text" placeholder="请输入手机号" name="phone" value="" required>
+                </div>
+                <div>
+                    <label><b>请输入邮箱</b></label>
+                    <input type="email" placeholder="请输入邮箱" name="email" value="" required>
+                </div>
+                <div>
+                    <label><b>请输入密码</b></label>
+                    <input type="password" placeholder="请输入密码" name="password" value="" required>
+                </div>
+                <div>
+                    <label><b>请确认密码</b></label>
+                    <input type="password" placeholder="请再次输入密码" name="repassword" value=""
+                           required>
+                </div>
+                <div class="clearfix">
+                    <button type="button" onclick="closeModal('add_user_modal')"
+                            class="cancelBtn">取消
+                    </button>
+                    <button type="submit" class="confirmBtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 上传用户文件弹窗 -->
+    <div id="import_user_modal" class="pop_up_box">
+        <span onclick="closeModal('import_user_modal')" class="close"
+              title="Close Modal">×</span>
+        <form class="pop_up_box-content animate" id="import_user_file"
+              enctype="multipart/form-data">
+            <div class="pop_up_container">
+                <h3>上传文件并导入</h3>
+                <div>
+                    <input type="file"  name="file" id="fileInput" required>
+                </div>
+
+                <div class="clearfix">
+                    <button type="button" onclick="closeModal('import_user_modal')"
+                            class="cancelBtn">取消
+                    </button>
+                    <button type="submit" class="confirmBtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // 搜索用户
+        $('#search_user').click(function () {
+            let content = $('#search_user_content').val()
+            location.href = "{{url_for('user.user_list')}}?content=" + content
+        })
+
+        // 显示导入用户弹窗
+        $('#import_users').click(function () {
+            document.getElementById('import_user_modal').style.display = 'block'
+        })
+        // 导入用户表单提交
+        $(document).on('submit', '#import_user_file', function (event) {
+            event.preventDefault(); // 阻止默认的表单提交
+
+            // 获取表单的值
+            var file = $('#fileInput')[0].files[0];
+            console.log("file:", file);
+            // 调用接口
+            $.ajax({
+                url: "{{url_for('user.import_users')}}",  // Flask接口的URL
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.code == 200) {
+                        showAlert(data.message, "success");
+                        document.getElementById('import_user_modal').style.display = 'none'; // 隐藏弹窗
+                        setTimeout(() => {
+                            location.reload();  // 需要刷新页面
+                        }, 2000);
+                    } else {
+                        showAlert(data.message, "danger");
+                    }
+                    },
+                error: function (xhr, status, error) {
+                    showAlert("请求失败，请稍后重试", "danger");
+                    console.error("请求失败:", error);
+                }
+            });
+        });
+        // 导出用户
+        $('#export_users').click(function () {
+            location.href = '{{url_for("user.export_users")}}'
+        })
+        // 编辑用户弹窗回显数据
+        $(document).on('click', '.edit_user', function () {
+            document.getElementById('edit_user_modal').style.display = 'block'
+            let edit_username = $(this).parent().prevAll(".edit_username").text()
+            let edit_phone = $(this).parent().prevAll(".edit_phone").text()
+            let edit_email = $(this).parent().prevAll(".edit_email").text()
+            {#let edit_status = $(this).parent().prevAll(".edit_status").text()#}
+            var id = $(this).data('id')
+            console.log("id:", id);
+            $("input[name='edit_username']").val(edit_username)
+            $("input[name='edit_phone']").val(edit_phone)
+            $("input[name='edit_email']").val(edit_email)
+            {#$("select[name='edit_status']").val(edit_status).trigger('change');#}
+            $("#edit_user").attr('action', "{{url_for('user.edit_user')}}?id=" + id)
+            console.log("Form action:", $("#edit_user").attr('action'));
+        })
+
+        // 提交编辑用户表单时使用 AJAX 请求
+        $(document).on('submit', '#edit_user', function (event) {
+            event.preventDefault(); // 阻止默认的表单提交
+
+            // 获取表单的值
+            var edit_username = $("input[name='edit_username']").val();
+            var edit_phone = $("input[name='edit_phone']").val();
+            var edit_email = $("input[name='edit_email']").val();
+            {#var edit_status = $("select[name='edit_isdelete']").val();#}
+            var id = $(this).attr('action').split('?id=')[1]; // 从action中获取id
+
+            // 调用接口
+            $.ajax({
+                url: "{{url_for('user.edit_user')}}",  // Flask接口的URL
+                method: 'POST',
+                data: {
+                    id: id,
+                    edit_username: edit_username,
+                    edit_phone: edit_phone,
+                    edit_email: edit_email,
+                    {#edit_status: edit_status,#}
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        showAlert("修改成功", "success");
+                        document.getElementById('edit_user_modal').style.display = 'none'; // 隐藏弹窗
+                        setTimeout(() => {
+                            location.reload();  // 可根据需要刷新页面，或者做其他处理
+                        }, 2000);
+                    } else {
+                        showAlert(data.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert("请求失败，请稍后重试", "danger");
+                    console.error("请求失败:", error);
+                }
+            });
+        });
+
+        // 显示编辑用户密码弹窗
+        $(document).on('click', '.edit_user_password', function () {
+            document.getElementById('edit_user_password_modal').style.display = 'block'
+            id = $(this).data('id')
+            $("#edit_user_password").attr('action', "{{url_for('user.reset_password')}}?id=" + id)
+        })
+
+        // 编辑用户密码请求提交
+        $(document).on('submit', '#edit_user_password', function (event) {
+            event.preventDefault(); // 阻止默认的表单提交
+
+            // 获取表单的值
+            var edit_password = $("input[name='edit_user_password']").val();
+            var edit_repassword = $("input[name='edit_user_password_confirm']").val();
+            var id = $(this).attr('action').split('?id=')[1]; // 从action中获取id
+
+            // 检查两次密码输入是否一致
+            if (edit_password !== edit_repassword) {
+                showAlert("两次输入的密码不一致，请重新输入", "danger");
+                return; // 阻止后续代码执行，不发送请求
+            }
+
+            // 调用接口
+            $.ajax({
+                url: "{{url_for('user.reset_password')}}",  // Flask接口的URL
+                method: 'POST',
+                data: {
+                    id: id,
+                    edit_password: edit_password,
+                    edit_repassword: edit_repassword,
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        showAlert("修改成功", "success");
+                        document.getElementById('edit_user_modal').style.display = 'none'; // 隐藏弹窗
+                        setTimeout(() => {
+                            location.reload();  // 可根据需要刷新页面，或者做其他处理
+                        }, 2000);
+                    } else {
+                        showAlert(data.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert("请求失败，请稍后重试", "danger");
+                    console.error("请求失败:", error);
+                }
+            });
+        });
+
+
+        // 添加用户请求提交
+        $(document).on('submit', '#add_user', function (event) {
+            event.preventDefault(); // 阻止默认的表单提交
+
+            // 获取表单的值
+            var username = $("input[name='username']").val();
+            var phone = $("input[name='phone']").val();
+            var email = $("input[name='email']").val();
+            var password = $("input[name='password']").val();
+            var repassword = $("input[name='repassword']").val();
+
+            // 检查两次密码输入是否一致
+            if (password !== repassword) {
+                showAlert("两次输入的密码不一致，请重新输入", "danger");
+                return; // 阻止后续代码执行，不发送请求
+            }
+
+            // 调用接口
+            $.ajax({
+                url: "{{url_for('user.add_user')}}",  // Flask接口的URL
+                method: 'POST',
+                data: {
+                    username: username,
+                    phone: phone,
+                    email: email,
+                    password: password,
+                    repassword: repassword,
+                },
+                success: function (data) {
+                    if (data.code == 200) {
+                        showAlert(data.message, "success");
+                        document.getElementById('add_user_modal').style.display = 'none'; // 隐藏弹窗
+                        setTimeout(() => {
+                            location.reload();  // 可根据需要刷新页面，或者做其他处理
+                        }, 2000);
+                    } else {
+                        showAlert(data.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert("请求失败，请稍后重试", "danger");
+                    console.error("请求失败:", error);
+                }
+            });
+        });
+    </script>
+{% endblock %}

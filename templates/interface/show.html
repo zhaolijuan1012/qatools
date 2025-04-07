@@ -1,0 +1,350 @@
+{% extends 'home.html' %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/interface.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/pop_up_window.css') }}">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+{% endblock %}
+
+{% block newcontent %}
+    <ol class="breadcrumb">
+        <li class="active">接口</li>
+    </ol>
+    <div class="top">
+        <div style="float: left;">
+            <input type="text" class="btn btn-default" placeholder="可根据URL、接口描述模糊查找"
+                   id="search_interface_content"
+                   value="{{ content }}">
+            <button type="submit" class="btn btn-default" id="search_interface">搜索</button>
+        </div>
+        <div style="float: right;">
+            <button class="btn btn-default" onclick="document.getElementById('id01').style.display='block'"
+                    style="width:auto;">添加接口
+            </button>
+            &nbsp&nbsp
+            <button class="btn btn-default" id="import_interface">导入</button>
+            &nbsp&nbsp
+            <button class="btn btn-default" id="export_interface">导出</button>
+        </div>
+    </div>
+
+    <!-- 添加接口弹窗 -->
+    <div id="id01" class="modal">
+        <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">×</span>
+        <form class="modal-content animate" action="{{ url_for('interface.add_interface') }}" id="add_interface">
+            <div class="container">
+                <div>
+                    <label><b>接口描述</b></label>
+                    <input type="text" placeholder="请输入接口描述" name="interfaceDescription" value="" required>
+                </div>
+
+                <div>
+                    <label><b>接口URL</b></label>
+                    <input type="text" placeholder="请输入接口URL" name="interfaceURL" required>
+                </div>
+
+                <div>
+                    <label><b>所属模块</b></label>
+                    <input type="text" placeholder="请输入所属模块" name="module" required>
+                </div>
+                <div>
+                    <label><b>请求方式</b></label>
+                    <!-- <input type="password" placeholder="请输入所属模块" name="request_method" required> -->
+                    <select name="request_method">
+                        <option value="GET" selected>GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="HEAD">HEAD</option>
+                        <option value="DELETE">DELETE</option>
+                        <option value="OPTIONS">OPTIONS</option>
+                    </select>
+                </div>
+                <div class="clearfix">
+                    <button type="button" onclick="document.getElementById('id01').style.display='none'"
+                            class="cancelbtn">取消
+                    </button>
+                    <button type="submit" class="signupbtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 修改接口弹窗 -->
+    <div id="id02" class="modal">
+        <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">×</span>
+        <form class="modal-content animate" id="edit_interface" action="#" method="post">
+            <div class="container">
+                <div>
+                    <label><b>接口描述</b></label>
+                    <input type="text" placeholder="请输入接口描述" name="edit_interfaceDescription" value="" required>
+                </div>
+
+                <div>
+                    <label><b>接口URL</b></label>
+                    <input type="text" placeholder="请输入接口URL" name="edit_interfaceURL" value="" required>
+                </div>
+
+                <div>
+                    <label><b>所属模块</b></label>
+                    <input type="text" placeholder="请输入所属模块" name="edit_module" value="" required>
+                </div>
+                <div>
+                    <label><b>请求方式</b></label>
+                    <!-- <input type="password" placeholder="请输入所属模块" name="request_method" required> -->
+                    <select name="edit_request_method">
+                        <option value="GET" selected>GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="HEAD">HEAD</option>
+                        <option value="DELETE">DELETE</option>
+                        <option value="OPTIONS">OPTIONS</option>
+                    </select>
+                </div>
+                <div class="clearfix">
+                    <button type="button" onclick="document.getElementById('id02').style.display='none'"
+                            class="cancelbtn">取消
+                    </button>
+                    <button type="submit" class="signupbtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 接口列表展示 -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            {% if interfaces %}
+                <tr>
+                    <th>序号</th>
+                    <th>接口ID</th>
+                    <th>接口描述</th>
+                    <th>接口url</th>
+                    <th>请求方式</th>
+                    <th>创建者</th>
+                    <th>创建时间</th>
+                    <th>修改者</th>
+                    <th>修改时间</th>
+                    <th>所属模块</th>
+                    <th>操作</th>
+                </tr>
+                {% for interface in interfaces %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="id">{{ interface.id }}</td>
+                        <td class="interfaceDescription">{{ interface.interfaceDescription }}</td>
+                        <td class="interfaceURL">{{ interface.interfaceURL }}</td>
+                        <td class="request_method">{{ interface.request_method }}</td>
+                        <td class=creator>{{ interface.creator }}</td>
+                        <td class="add_time">{{ interface.add_time }}</td>
+                        <td class="mender">{{ interface.mender }}</td>
+                        <td class="edit_time">{{ interface.edit_time }}</td>
+                        <td class="module">{{ interface.module }}</td>
+                        <td>
+                            <a class="edit_interface">修改</a>
+                            <a class="del_interface">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <p style="text-align: center;margin-top: 250px">暂无数据～</p>
+            {% endif %}
+        </table>
+        {% if interfaces.total>0 %}
+            <nav aria-label="Page navigation" class="col-md-offset-5">
+                <ul class="pagination">
+                    <li {% if not interfaces.has_prev %} class="disabled" {% endif %}>
+                        <a {% if interfaces.has_prev %}
+                            href="{{ url_for('interface.show') }}?page={{ interfaces.prev_num }}&content={{ content }}" {% else %}
+                            href='#' {% endif %} aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% for page_num in range(1,interfaces.pages + 1) %}
+                        <li {% if interfaces.page==page_num %} class="active" {% endif %}><a
+                                href="{{ url_for('interface.show' ) }}?page={{ page_num }}&content={{ content }}">{{ page_num }}</a>
+                        </li>
+                    {% endfor %}
+                    <li {% if not interfaces.has_next %} class="disabled" {% endif %}>
+                        <a {% if interfaces.has_next %}
+                            href="{{ url_for('interface.show') }}?page={{ interfaces.next_num }}&content={{ content }}" {% else %}
+                            href="#" {% endif %} aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+
+    <!-- 上传接口文件弹窗 -->
+    <div id="import_interface_modal" class="pop_up_box">
+        <span onclick="closeModal('import_interface_modal')" class="close"
+              title="Close Modal">×</span>
+        <form class="pop_up_box-content animate" id="import_interface_file"
+              enctype="multipart/form-data">
+            <div class="pop_up_container">
+                <h3>上传文件并导入</h3>
+                <p style="color: grey">支持从ApiFox中导出的openapi3.0文件</p>
+                <div>
+                    <input type="file" name="file" id="fileInput" required>
+                </div>
+
+                <div class="clearfix">
+                    <button type="button" onclick="closeModal('import_interface_modal')"
+                            class="cancelBtn">取消
+                    </button>
+                    <button type="submit" class="confirmBtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        // 显示导入弹窗
+        $('#import_interface').click(function () {
+            document.getElementById('import_interface_modal').style.display = 'block'
+        })
+
+        // 导入接口表单提交
+        $(document).on('submit', '#import_interface_file', function (event) {
+            event.preventDefault(); // 阻止默认的表单提交
+
+            // 获取表单的值
+            var file = $('#fileInput')[0].files[0];
+            console.log("file:", file);
+            // 调用接口
+            $.ajax({
+                url: "{{url_for('interface.import_interfaces')}}",  // Flask接口的URL
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.code == 200) {
+                        showAlert(data.message, "success");
+                        document.getElementById('import_interface_modal').style.display = 'none'; // 隐藏弹窗
+                        setTimeout(() => {
+                            location.reload();  // 需要刷新页面
+                        }, 2000);
+                    } else {
+                        showAlert(data.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert("请求失败，请稍后重试", "danger");
+                    console.error("请求失败:", error);
+                }
+            });
+        });
+
+        // 导出接口
+        $('#export_interface').click(function () {
+            location.href = '{{url_for("interface.export_interface")}}'
+        })
+
+        //编辑接口弹窗回显数据并绑定提交事件
+        $(document).on('click', '.edit_interface', function () {
+            document.getElementById('id02').style.display = 'block'
+            let interfaceDescription = $(this).parent().prevAll(".interfaceDescription").text()
+            let interfaceURL = $(this).parent().prevAll(".interfaceURL").text()
+            let module = $(this).parent().prevAll(".module").text()
+            let request_method = $(this).parent().prevAll(".request_method").text()
+            var id = $(this).parent().prevAll(".id").text()
+            console.log(request_method)
+            $("input[name='edit_interfaceDescription']").val(interfaceDescription)
+            $("input[name='edit_interfaceURL']").val(interfaceURL)
+            $("input[name='edit_module']").val(module)
+            //$("select[name='edit_request_method'] option[value='" + request_method + "']").attr('selected', true)
+            $("select[name='edit_request_method']").val(request_method).trigger('change');
+            $("#edit_interface").attr('action', "{{url_for('interface.edit_interface')}}?id=" + id)
+        })
+
+        // 点击搜索按钮时触发搜索接口事件
+        $('#search_interface').click(function () {
+            let content = $('#search_interface_content').val()
+            location.href = '{{url_for("interface.show")}}?content=' + content
+        })
+
+        // 删除接口
+        $('.del_interface').click(function () {
+            var a = confirm('删除接口对应的case和用例集也会同步删除，请确认是否删除') //返回值为布尔数据类型
+            //如果你点确定返回是true
+            //如果你点取消返回是false
+            let id = $(this).parent().prevAll(".id").text()
+            if (a) {
+                $.ajax({
+                    url: "{{url_for('interface.del_interface')}}?id=" + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        // 在这里处理接口返回的数据
+                        if (data.message === "success") {
+                            showAlert('删除接口成功', 'success')
+                            // 刷新页面
+                            location.reload();
+                        } else {
+                            showAlert(data.message, 'danger')
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('请求出错:', textStatus, errorThrown);
+                        showAlert('删除操作出错，请稍后重试', 'danger')
+                    }
+                })
+            }
+        })
+
+        // 点击取消和X按钮时清空内容
+        function clearModalContent() {
+            $('#id01').find('input[type=text], textarea, select').val('');
+            $('#id01').find('select').prop('selectedIndex', 0); // Add this line
+            $('#id01').find('.error-message').remove();
+            $('#id02').find('input[type=text], textarea, select').val('');
+            $('#id02').find('select').prop('selectedIndex', 0); // Add this line
+            $('#id02').find('.error-message').remove();
+            // 移除通过函数添加的部分
+            $('.added-part').remove();
+            document.getElementById('id01').style.display = 'none';
+            document.getElementById('id02').style.display = 'none';
+        }
+
+        $('.cancelbtn, .close').click(clearModalContent);
+
+        // 提交添加接口表单时使用 AJAX 请求
+        $(document).on('submit', '#add_interface', function (event) {
+            event.preventDefault(); // 阻止默认的表单提交
+
+
+            // 调用接口
+            $.ajax({
+                url: "{{url_for('interface.add_interface')}}",  // Flask接口的URL
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.code == 200) {
+                        showAlert(data.message, "success");
+                        document.getElementById('id01').style.display = 'none'; // 隐藏弹窗
+                        setTimeout(() => {
+                            location.reload();  // 可根据需要刷新页面，或者做其他处理
+                        }, 2000);
+                    } else {
+                        showAlert(data.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert("请求失败，请稍后重试", "danger");
+                    console.error("请求失败:", error);
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

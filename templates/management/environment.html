@@ -1,0 +1,162 @@
+{% extends "home.html" %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/pop_up_window.css') }}">
+{% endblock %}
+
+{% block newcontent %}
+    <ol class="breadcrumb">
+        <li class="active">环境设置</li>
+    </ol>
+    <div class="top" style="display: flex; justify-content: space-between; align-items: center;">
+        <h5 style="margin: 0;">默认环境:{{ default_env.name }}</h5>
+        <div style="float: right;">
+            <button class="btn btn-default" onclick="document.getElementById('add_env_modal').style.display='block'"
+                    style="width:auto;">添加环境
+            </button>
+            <button class="btn btn-default" style="width:auto;" id="set_default_env_btn"
+                    onclick="document.getElementById('set_default_env_modal').style.display='block'">设置默认环境
+            </button>
+        </div>
+    </div>
+    <!--环境列表 -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>序号</th>
+                <th>环境名称</th>
+                <th>host</th>
+                <th>port</th>
+                <th>描述</th>
+            </tr>
+            {% for env in envs %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="name">{{ env.name }}</td>
+                    <td class="host">{{ env.host }}</td>
+                    <td class="port">{{ env.port }}</td>
+                    <td class="description">{{ env.description }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <!--添加环境弹窗 -->
+    <div id="add_env_modal" class="pop_up_box">
+        <span onclick="closeModal('add_env_modal')" class="close"
+              title="Close Modal">×</span>
+        <form class="pop_up_box-content animate" id="add_env" action="#" method="post">
+            <div class="pop_up_container">
+                <div>
+                    <label><b>请输入环境名称</b></label>
+                    <input type="text" placeholder="请输入环境名称" name="name" value="" required>
+                </div>
+                <div>
+                    <label><b>请输入host</b></label>
+                    <input type="text" placeholder="请输入host" name="host" value=""
+                           required>
+                </div>
+                <div>
+                    <label><b>请输入post</b></label>
+                    <input type="text" placeholder="请输入port" name="port" value=""
+                           required>
+                </div>
+                <div>
+                    <label><b>请输入描述信息</b></label>
+                    <input type="text" placeholder="请输入描述信息" name="description" value="">
+                </div>
+                <div class="clearfix">
+                    <button type="button" onclick="closeModal('add_env_modal')"
+                            class="cancelBtn">取消
+                    </button>
+                    <button type="submit" class="confirmBtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--设置默认环境弹窗 -->
+    <div id="set_default_env_modal" class="pop_up_box">
+        <span onclick="closeModal('set_default_env_modal')" class="close"
+              title="Close Modal">×</span>
+        <form class="pop_up_box-content animate" id="set_default_env" action="#" method="post">
+            <div class="pop_up_container">
+                <div>
+                    <label><b>请选择默认环境</b></label>
+                    <select name="default_env">
+                        <option value="" disabled selected>请选择环境</option>
+                        {% for env in envs %}
+                            <option value="{{ env.id }}" {% if env.is_default %}selected{% endif %}>
+                                {{ env.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="clearfix">
+                    <button type="button" onclick="closeModal('set_default_env_modal')"
+                            class="cancelBtn">取消
+                    </button>
+                    <button type="submit" class="confirmBtn">确定</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(document).on('submit', '#set_default_env', function (event) {
+            event.preventDefault(); // 阻止默认的表单提交
+            // 调用接口
+            $.ajax({
+                url: "{{url_for('manage.set_default_env')}}",
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.code == 200) {
+                        showAlert(data.message, "success");
+                        document.getElementById('set_default_env_modal').style.display = 'none'; // 隐藏弹窗
+                        setTimeout(() => {
+                            location.reload();  // 需要刷新页面
+                        }, 2000);
+                    } else {
+                        showAlert(data.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert("请求失败，请稍后重试", "danger");
+                    console.error("请求失败:", error);
+                }
+            });
+        });
+        $(document).on('submit', '#add_env', function (event) {
+            event.preventDefault(); // 阻止默认的表单提交
+            // 调用接口
+            $.ajax({
+                url: "{{url_for('manage.add_env')}}",
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.code == 200) {
+                        showAlert(data.message, "success");
+                        document.getElementById('add_env_modal').style.display = 'none'; // 隐藏弹窗
+                        setTimeout(() => {
+                            location.reload();  // 需要刷新页面
+                        }, 2000);
+                    } else {
+                        showAlert(data.message, "danger");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert("请求失败，请稍后重试", "danger");
+                    console.error("请求失败:", error);
+                }
+            });
+        });
+    </script>
+{% endblock %}
