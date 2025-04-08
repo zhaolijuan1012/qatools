@@ -19,12 +19,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }} 
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .  
-          push: true  
-          tags: ${{ secrets.DOCKER_USERNAME_1 }}/qatools:${{ github.sha }}
+      # - name: Build Docker image
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     context: .  
+      #     push: true  
+      #     tags: ${{ secrets.DOCKER_USERNAME_1 }}/qatools:${{ github.sha }}
 
       - name:  Deploy to server
         uses: appleboy/ssh-action@v1
