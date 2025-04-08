@@ -25,4 +25,16 @@ jobs:
           context: .  
           push: true  
           tags: ${{ secrets.DOCKER_USERNAME_1 }}/qatools:${{ github.sha }}
+
+      - name:  Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME_1 }}/qatools:${{ github.sha }}
+            docker stop qatools || true
+            docker rm qatools || true
+            docker run -d -p 5000:5000 --name qatools --network qatools_net ${{ secrets.DOCKER_USERNAME_1 }}/qatools:${{ github.sha }}
         
